@@ -16,17 +16,15 @@ var getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
 // Создание массива 8 мок-объектов
 var createArrayAd = function () {
   var AdArray = [];
   for (var i = 0; i <= 7; i++) {
-    console.log(i);
     var Ad = {
       author: {
-//        avatar: 'img/avatars/user0' + [i + 1] + '.png',
-        avatar: `img/avatars/user0${i + 1}.png`,
+        avatar: 'img/avatars/user0' + [i + 1] + '.png',
       },
       offer: {
         title: 'Уютная квартира',
@@ -40,7 +38,7 @@ var createArrayAd = function () {
         features: ['wifi', 'dishwasher', 'parking', 'elevator', 'conditioner'],
         description: 'Описание',
         photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-        'http://o0.github.io/assets/images/tokyo/hotel3.jpg'],
+          'http://o0.github.io/assets/images/tokyo/hotel3.jpg'],
       },
       location: {
         x: getRandomIntInclusive(1, 1200),
@@ -48,7 +46,7 @@ var createArrayAd = function () {
       },
     };
     AdArray.push(Ad);
-  };
+  }
   return AdArray;
 };
 
