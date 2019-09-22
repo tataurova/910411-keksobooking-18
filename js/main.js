@@ -5,13 +5,8 @@ var timesOffer = ['12:00', '13:00', '14:00'];
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 
-// Временное решение - переключение карты в активное состояние (удаление класса)
-var map = document.querySelector('.map');;
-map.classList.remove('map--faded');
-
-
 // Выбор случайного элемента массива
-var getRandomElementArray = function (nameArray) {
+var getRandomElement = function (nameArray) {
   var element = nameArray[Math.floor(Math.random() * nameArray.length)];
   return element;
 };
@@ -30,17 +25,18 @@ var createArrayAd = function () {
     console.log(i);
     var Ad = {
       author: {
-        avatar: 'img/avatars/user0' + [i + 1] + '.png',
+//        avatar: 'img/avatars/user0' + [i + 1] + '.png',
+        avatar: `img/avatars/user0${i + 1}.png`,
       },
       offer: {
         title: 'Уютная квартира',
         address: '600, 350',
         price: 10000,
-        type: getRandomElementArray(typesOffer),
+        type: getRandomElement(typesOffer),
         rooms: 3,
         guests: 2,
-        checkin: getRandomElementArray(timesOffer),
-        checkout: getRandomElementArray(timesOffer),
+        checkin: getRandomElement(timesOffer),
+        checkout: getRandomElement(timesOffer),
         features: ['wifi', 'dishwasher', 'parking', 'elevator', 'conditioner'],
         description: 'Описание',
         photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
@@ -56,27 +52,35 @@ var createArrayAd = function () {
   return AdArray;
 };
 
-// Изменение свойств мок-объекта
-var renderPin = function () {
+// Создание DOM-элемента на основе мок-объекта
+var createPin = function (mockedAd) {
   var pinElement = similarPinTemplate.cloneNode(true);
-  pinElement.style.left = createArrayAd()[i].location.x - PIN_WIDTH / 2 + 'px';
-  pinElement.style.top = createArrayAd()[i].location.y - PIN_HEIGHT + 'px';
-  pinElement.querySelector('img').src = createArrayAd()[i].author.avatar;
-  pinElement.querySelector('img').alt = createArrayAd()[i].offer.title;
+  pinElement.style.left = mockedAd.location.x - PIN_WIDTH / 2 + 'px';
+  pinElement.style.top = mockedAd.location.y - PIN_HEIGHT + 'px';
+  pinElement.querySelector('img').src = mockedAd.author.avatar;
+  pinElement.querySelector('img').alt = mockedAd.offer.title;
   return pinElement;
 };
 
-// Поиск шаблона копируемого объекта - метки
+// Создание блока DOM-элементов, которые будут встроены в разметку
+var createFragmentPins = function () {
+  var fragment = document.createDocumentFragment();
+  var mockedAds = createArrayAd();
+  for (var el = 0; el < mockedAds.length; el++) {
+    fragment.appendChild(createPin(mockedAds[el]));
+  }
+  return fragment;
+};
+
+// Поиск шаблона копируемого DOM-элемента
 var similarPinTemplate = document.querySelector('#pin')
     .content
     .querySelector('.map__pin');
 
-// Создание блока объектов - меток, которые будут встроены в карту
-var fragment = document.createDocumentFragment ();
-for (var i = 0; i < createArrayAd().length; i++) {
-  fragment.appendChild(renderPin());
-};
+// Временное решение - переключение карты в активное состояние (удаление класса)
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
 
-// Вставка блока объектов - меток в разметку
+// Вставка блока DOM-элементов в разметку
 var pinBlock = document.querySelector('.map__pins');
-pinBlock.appendChild(fragment);
+pinBlock.appendChild(createFragmentPins());
