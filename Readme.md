@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ольга Татаурова](https://up.htmlacademy.ru/javascript/18/user/910411).
-* Наставник: [Антон Попов] (https://htmlacademy.ru/profile/joker).
+* Наставник: [Саяжан Онласын] (https://htmlacademy.ru/profile/id808151).
 
 ---
 
