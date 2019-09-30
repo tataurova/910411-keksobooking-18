@@ -7,6 +7,7 @@ var PIN_HEIGHT = 70;
 var PIN_MAIN_WIDTH = 65;
 var PIN_MAIN_HEIGHT = 87;
 var ENTER_KEYCODE = 13;
+var map = document.querySelector('.map');
 var activationMapTrigger = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var mapFiltersForm = document.querySelector('.map__filters');
@@ -15,6 +16,11 @@ var filterSelects = mapFiltersForm.getElementsByTagName('select');
 var filterFieldsets = mapFiltersForm.getElementsByTagName('fieldset');
 var adAddress = adForm.querySelector('#address');
 var roomsSelect = document.querySelector('#room_number');
+var similarPinTemplate = document.querySelector('#pin') // Поиск шаблона копируемого DOM-элемента
+    .content
+    .querySelector('.map__pin');
+var cardTemplate = document.querySelector('#card')
+    .content;
 
 var offerTypeDictionary = {
   'palace': 'Дворец',
@@ -88,9 +94,6 @@ var createFragmentPins = function () {
   return fragment;
 };
 
-var cardTemplate = document.querySelector('#card')
-    .content;
-
 // Создание элемента
 var makeElement = function (tagName, className, text) {
   var element = document.createElement(tagName);
@@ -159,24 +162,6 @@ var createCard = function (advertisement) {
   return card;
 };
 
-// Создание массива и вставка карточки в разметку
-var ArrayAd = createArrayAd();
-var mapFilters = document.querySelector('.map__filters-container');
-mapFilters.before(createCard(ArrayAd[0]));
-
-// Поиск шаблона копируемого DOM-элемента
-var similarPinTemplate = document.querySelector('#pin')
-    .content
-    .querySelector('.map__pin');
-
-// Временное решение - переключение карты в активное состояние (удаление класса)
-var map = document.querySelector('.map');
-// map.classList.remove('map--faded');
-
-// Вставка блока DOM-элементов в разметку
-var pinBlock = document.querySelector('.map__pins');
-pinBlock.appendChild(createFragmentPins());
-
 // Деактивация элементов (для форм)
 var deactivateElements = function (array) {
   for (var i = 0; i < array.length; i++) {
@@ -243,7 +228,16 @@ var validateRoomsGuests = function () {
   }
 };
 
-// Листенеры на главную метку map__pin--main для активации страницы
+// Создание массива и вставка карточки в разметку
+var ArrayAd = createArrayAd();
+var mapFilters = document.querySelector('.map__filters-container');
+mapFilters.before(createCard(ArrayAd[0]));
+
+// Вставка блока DOM-элементов в разметку
+var pinBlock = document.querySelector('.map__pins');
+pinBlock.appendChild(createFragmentPins());
+
+// Листенер на главную метку map__pin--main для активации страницы нажатием мышки
 activationMapTrigger.addEventListener('mousedown', function () {
   activateMap();
   var left = getElementCoordinates(activationMapTrigger).left + Math.round(PIN_MAIN_WIDTH / 2);
@@ -252,6 +246,7 @@ activationMapTrigger.addEventListener('mousedown', function () {
   adAddress.value = left + ', ' + top;
 });
 
+// Листенер на главную метку map__pin--main для активации страницы нажатием Enter
 activationMapTrigger.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     activateMap();
