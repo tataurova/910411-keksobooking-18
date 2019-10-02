@@ -4,6 +4,23 @@ var typesOffer = ['palace', 'flat', 'house', 'bungalo'];
 var timesOffer = ['12:00', '13:00', '14:00'];
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
+var PIN_MAIN_WIDTH = 65;
+var PIN_MAIN_HEIGHT = 87;
+var ENTER_KEYCODE = 13;
+var map = document.querySelector('.map');
+var activationMapTrigger = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var mapFiltersForm = document.querySelector('.map__filters');
+var adFieldsets = adForm.querySelectorAll('fieldset');
+var filterSelects = mapFiltersForm.getElementsByTagName('select');
+var filterFieldsets = mapFiltersForm.getElementsByTagName('fieldset');
+var adAddress = adForm.querySelector('#address');
+var roomsSelect = document.querySelector('#room_number');
+var similarPinTemplate = document.querySelector('#pin') // Поиск шаблона копируемого DOM-элемента
+    .content
+    .querySelector('.map__pin');
+var cardTemplate = document.querySelector('#card')
+    .content;
 
 var offerTypeDictionary = {
   'palace': 'Дворец',
@@ -77,9 +94,6 @@ var createFragmentPins = function () {
   return fragment;
 };
 
-var cardTemplate = document.querySelector('#card')
-    .content;
-
 // Создание элемента
 var makeElement = function (tagName, className, text) {
   var element = document.createElement(tagName);
@@ -148,20 +162,104 @@ var createCard = function (advertisement) {
   return card;
 };
 
+// Деактивация элементов (для форм)
+var deactivateElements = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    array[i].disabled = true;
+  }
+};
+
+// Активация элементов (для форм)
+var activateElements = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    array[i].disabled = false;
+  }
+};
+
+// Активация страницы
+var activateMap = function () {
+  map.classList.remove('map--faded');
+  activateElements(adFieldsets);
+  activateElements(filterSelects);
+  activateElements(filterFieldsets);
+};
+
+// Получение координат элемента
+var getElementCoordinates = function (element) {
+  var bodyRect = document.body.getBoundingClientRect();
+  var elemRect = element.getBoundingClientRect();
+  var offsetX = elemRect.left - bodyRect.left;
+  var offsetY = elemRect.top - bodyRect.top;
+  var coordinates = {
+    left: offsetX,
+    top: offsetY
+  };
+  return coordinates;
+};
+
+// Ограничение выбора количества гостей для количества комнат
+var validateRoomsGuests = function () {
+  var roomsCapacityMap = {
+    '1': {
+      'guests': ['1'],
+      'tipText': '1 комната для 1 гостя'
+    },
+    '2': {
+      'guests': ['1', '2'],
+      'tipText': '2 комнаты для 1 и 2 гостей'
+    },
+    '3': {
+      'guests': ['1', '2', '3'],
+      'tipText': '3 комнаты для 1, 2 и 3 гостей'
+    },
+    'any': {
+      'guests': ['any'],
+      'tipText': '100 комнат не для гостей'
+    },
+  };
+
+  var rooms = roomsSelect.value;
+  var guests = document.querySelector('#capacity').value;
+
+  if (roomsCapacityMap[rooms].guests.includes(guests)) {
+    roomsSelect.setCustomValidity('');
+  } else {
+    roomsSelect.setCustomValidity(roomsCapacityMap[rooms].tipText);
+  }
+};
+
 // Создание массива и вставка карточки в разметку
 var ArrayAd = createArrayAd();
 var mapFilters = document.querySelector('.map__filters-container');
 mapFilters.before(createCard(ArrayAd[0]));
 
-// Поиск шаблона копируемого DOM-элемента
-var similarPinTemplate = document.querySelector('#pin')
-    .content
-    .querySelector('.map__pin');
-
-// Временное решение - переключение карты в активное состояние (удаление класса)
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
 // Вставка блока DOM-элементов в разметку
 var pinBlock = document.querySelector('.map__pins');
 pinBlock.appendChild(createFragmentPins());
+
+// Листенер на главную метку map__pin--main для активации страницы нажатием мышки
+activationMapTrigger.addEventListener('mousedown', function () {
+  activateMap();
+  var left = getElementCoordinates(activationMapTrigger).left + Math.round(PIN_MAIN_WIDTH / 2);
+  var top = getElementCoordinates(activationMapTrigger).top + PIN_MAIN_HEIGHT;
+  // вызов метода, который устанавливает значения поля ввода адреса
+  adAddress.value = left + ', ' + top;
+});
+
+// Листенер на главную метку map__pin--main для активации страницы нажатием Enter
+activationMapTrigger.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    activateMap();
+  }
+  adAddress.value = getElementCoordinates(activationMapTrigger).offsetX + ', '
+  + getElementCoordinates(activationMapTrigger).offsetY;
+});
+
+// Валидация количества комнат для количества гостей
+roomsSelect.addEventListener('change', validateRoomsGuests);
+
+// Деактивация страницы
+map.classList.add('map--faded');
+deactivateElements(adFieldsets);
+deactivateElements(filterSelects);
+deactivateElements(filterFieldsets);
