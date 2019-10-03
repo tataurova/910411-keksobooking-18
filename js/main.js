@@ -233,25 +233,25 @@ var validateRoomsGuests = function () {
   var rooms = roomsSelect.value;
   var guests = document.querySelector('#capacity').value;
 
-    if (roomsCapacityMap[rooms].guests.includes(guests)) {
+  if (roomsCapacityMap[rooms].guests.includes(guests)) {
     roomsSelect.setCustomValidity('');
   } else {
     roomsSelect.setCustomValidity(roomsCapacityMap[rooms].tipText);
   }
 };
 
-var onPopupEscPress = function(evt) {
+var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     closePopup();
   }
 };
 
-var openPopup = function() {
+var openPopup = function () {
   adCard.classList.remove('hidden');
   document.addEventListener('keydown', onPopupEscPress);
 };
 
-var closePopup = function() {
+var closePopup = function () {
   adCard.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscPress);
 };
@@ -263,7 +263,7 @@ var openCardforPin = function () {
     cardOpen.addEventListener('click', function () {
       openPopup();
     });
-    cardOpen.addEventListener('keydown', function () {
+    cardOpen.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ENTER_KEYCODE) {
         openPopup();
       }
@@ -272,7 +272,7 @@ var openCardforPin = function () {
 };
 
 // Изменение min значения цены в разметке в зависимости от типа жилья
-var changeMinPrice = function() {
+var changeMinPrice = function () {
   priceForm.min = minPriceDictionary[typeForm.value];
   priceForm.placeholder = minPriceDictionary[typeForm.value];
 };
@@ -331,10 +331,10 @@ var popupClose = document.querySelector('.popup__close');
 // Листенер для закрытия карточки по клику
 popupClose.addEventListener('click', function () {
   closePopup();
-})
+});
 
 // Листенер для закрытия карточки по нажатию ESC
-popupClose.addEventListener('keydown', function(evt) {
+popupClose.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     closePopup();
   }
