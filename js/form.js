@@ -44,7 +44,7 @@
     }
   };
 
-   // Изменение min значения цены в разметке в зависимости от типа жилья
+  // Изменение min значения цены в разметке в зависимости от типа жилья
   var changeMinPrice = function () {
     priceForm.min = minPriceDictionary[typeForm.value];
     priceForm.placeholder = minPriceDictionary[typeForm.value];
