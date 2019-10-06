@@ -4,9 +4,10 @@ var typesOffer = ['palace', 'flat', 'house', 'bungalo'];
 var timesOffer = ['12:00', '13:00', '14:00'];
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
-var PIN_MAIN_WIDTH = 65;
-var PIN_MAIN_HEIGHT = 87;
+var PIN_MAIN_WIDTH = 62;
+var PIN_MAIN_HEIGHT = 84;
 var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 var map = document.querySelector('.map');
 var activationMapTrigger = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
@@ -21,6 +22,16 @@ var similarPinTemplate = document.querySelector('#pin') // Поиск шабло
     .querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card')
     .content;
+var priceForm = document.querySelector('#price');
+var typeForm = document.querySelector('#type');
+var minPriceDictionary = {
+  'palace': 10000,
+  'flat': 1000,
+  'house': 5000,
+  'bungalo': 0,
+};
+var timeCheckIn = document.querySelector('#timein');
+var timeCheckOut = document.querySelector('#timeout');
 
 var offerTypeDictionary = {
   'palace': 'Дворец',
@@ -179,6 +190,7 @@ var activateElements = function (array) {
 // Активация страницы
 var activateMap = function () {
   map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
   activateElements(adFieldsets);
   activateElements(filterSelects);
   activateElements(filterFieldsets);
@@ -228,10 +240,59 @@ var validateRoomsGuests = function () {
   }
 };
 
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  adCard.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
+  adCard.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+// Листенеры на метки для отображения карточки
+var openCardforPin = function () {
+  for (var i = 0; i < pinsMap.length; i++) {
+    var cardOpen = pinsMap[i];
+    cardOpen.addEventListener('click', function () {
+      openPopup();
+    });
+    cardOpen.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ENTER_KEYCODE) {
+        openPopup();
+      }
+    });
+  }
+};
+
+// Изменение min значения цены в разметке в зависимости от типа жилья
+var changeMinPrice = function () {
+  priceForm.min = minPriceDictionary[typeForm.value];
+  priceForm.placeholder = minPriceDictionary[typeForm.value];
+};
+
+// Время выезда
+var changeTimeCheckOut = function () {
+  timeCheckOut.value = timeCheckIn.value;
+};
+
+// Время заезда
+var changeTimeCheckIn = function () {
+  timeCheckIn.value = timeCheckOut.value;
+};
+
 // Создание массива и вставка карточки в разметку
 var ArrayAd = createArrayAd();
 var mapFilters = document.querySelector('.map__filters-container');
 mapFilters.before(createCard(ArrayAd[0]));
+var adCard = document.querySelector('.map__card');
+adCard.classList.add('hidden');
 
 // Вставка блока DOM-элементов в разметку
 var pinBlock = document.querySelector('.map__pins');
@@ -260,6 +321,39 @@ roomsSelect.addEventListener('change', validateRoomsGuests);
 
 // Деактивация страницы
 map.classList.add('map--faded');
+adForm.classList.add('ad-form--disabled');
 deactivateElements(adFieldsets);
 deactivateElements(filterSelects);
 deactivateElements(filterFieldsets);
+
+var popupClose = document.querySelector('.popup__close');
+
+// Листенер для закрытия карточки по клику
+popupClose.addEventListener('click', function () {
+  closePopup();
+});
+
+// Листенер для закрытия карточки по нажатию ESC
+popupClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+});
+
+// Запуск функции с листенерами на метках карты для открытия карточки
+var pinsMap = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+openCardforPin();
+
+typeForm.addEventListener('change', function () {
+  changeMinPrice();
+});
+
+// Листенер на изменение времени заезда
+timeCheckIn.addEventListener('change', function () {
+  changeTimeCheckOut();
+});
+
+// Листенер на изменение времени выезда
+timeCheckOut.addEventListener('change', function () {
+  changeTimeCheckIn();
+});
