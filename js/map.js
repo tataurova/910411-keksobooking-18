@@ -93,20 +93,20 @@
         y: moveEvt.clientY
       };
 
-      var currentCoordX = window.main.activationMapTrigger.offsetLeft - shift.x;
-      var currentCoordY = window.main.activationMapTrigger.offsetTop - shift.y;
+      var currentX = window.main.activationMapTrigger.offsetLeft - shift.x;
+      var currentY = window.main.activationMapTrigger.offsetTop - shift.y;
 
       // Ограничение координаты X острой метки
-      if (currentCoordX > -Math.round(PIN_MAIN_WIDTH / 2) & currentCoordX < MAX_WIDTH_MAP - Math.round(PIN_MAIN_WIDTH / 2)) {
-        window.main.activationMapTrigger.style.left = currentCoordX + 'px';
+      if (currentX > -Math.round(PIN_MAIN_WIDTH / 2) & currentX < MAX_WIDTH_MAP - Math.round(PIN_MAIN_WIDTH / 2)) {
+        window.main.activationMapTrigger.style.left = currentX + 'px';
       }
 
       // Ограничение координаты Y острой метки
-      if (currentCoordY > (MIN_COORD_Y - PIN_MAIN_HEIGHT) & currentCoordY < (MAX_COORD_Y - PIN_MAIN_HEIGHT)) {
-        window.main.activationMapTrigger.style.top = currentCoordY + 'px';
+      if (currentY > (MIN_COORD_Y - PIN_MAIN_HEIGHT) & currentY < (MAX_COORD_Y - PIN_MAIN_HEIGHT)) {
+        window.main.activationMapTrigger.style.top = currentY + 'px';
       }
       // Значения X и Y в поле Адрес при перемещении метки
-      window.main.adAddress.value = window.getCoordinatesPin(window.main.activationMapTrigger, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
+      window.main.setCoordInAddress(window.main.activationMapTrigger, PIN_MAIN_WIDTH, PIN_MAIN_HEIGHT);
     };
 
     var onMouseUp = function (upEvt) {

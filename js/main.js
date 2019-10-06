@@ -43,25 +43,30 @@
     activateElements(filterFieldsets);
   };
 
-  // Получение координат метки на карте
-  window.getCoordinatesPin = function (pin, widthPin, heightPin) {
+  // Получение координат метки на карте и запись в поле Адрес
+  var getCoordinatesPin = function (pin, widthPin, heightPin) {
     var offsetX = pin.offsetLeft + Math.round(widthPin / 2);
     var offsetY = pin.offsetTop + Math.round(heightPin);
     var coordinates = offsetX + ', ' + offsetY;
     return coordinates;
   };
 
+  window.main.setCoordInAddress = function (pin, widthPin, heightPin) {
+    var coordinates = getCoordinatesPin(pin, widthPin, heightPin);
+    adAddress.value = coordinates;
+  };
+
   // Листенер на главную метку map__pin--main для активации страницы нажатием мышки
   activationMapTrigger.addEventListener('mousedown', function () {
     activateMap();
-    adAddress.value = window.getCoordinatesPin(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
+    window.main.setCoordInAddress(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
   });
 
   // Листенер на главную метку map__pin--main для активации страницы нажатием Enter
   activationMapTrigger.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       activateMap();
-      adAddress.value = window.getCoordinatesPin(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
+      window.main.setCoordInAddress(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
     }
   });
 
@@ -72,5 +77,5 @@
   deactivateElements(filterSelects);
   deactivateElements(filterFieldsets);
   // Значения X и Y в поле Адрес при загрузке страницы (главная метка - без острого конца)
-  adAddress.value = window.getCoordinatesPin(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
+  window.main.setCoordInAddress(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
 })();
