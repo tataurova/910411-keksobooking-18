@@ -3,12 +3,7 @@
 (function () {
   var ENTER_KEYCODE = 13;
   var ESC_KEYCODE = 27;
-  window.main = {
-    ENTER_KEYCODE: ENTER_KEYCODE,
-    ESC_KEYCODE: ESC_KEYCODE
-  };
-  var PIN_MAIN_WIDTH = 62;
-  var PIN_MAIN_HEIGHT = 84;
+  var WIDTH_MAIN_PIN_DEACTIVATE = 65;
   var map = document.querySelector('.map');
   var activationMapTrigger = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
@@ -17,6 +12,13 @@
   var filterSelects = mapFiltersForm.getElementsByTagName('select');
   var filterFieldsets = mapFiltersForm.getElementsByTagName('fieldset');
   var adAddress = adForm.querySelector('#address');
+
+  window.main = {
+    ENTER_KEYCODE: ENTER_KEYCODE,
+    ESC_KEYCODE: ESC_KEYCODE,
+    activationMapTrigger: activationMapTrigger,
+    adAddress: adAddress,
+  };
 
   // Деактивация элементов (для форм)
   var deactivateElements = function (array) {
@@ -41,35 +43,31 @@
     activateElements(filterFieldsets);
   };
 
-  // Получение координат элемента
-  var getElementCoordinates = function (element) {
-    var bodyRect = document.body.getBoundingClientRect();
-    var elemRect = element.getBoundingClientRect();
-    var offsetX = elemRect.left - bodyRect.left;
-    var offsetY = elemRect.top - bodyRect.top;
-    var coordinates = {
-      left: offsetX,
-      top: offsetY
-    };
+  // Получение координат метки на карте и запись в поле Адрес
+  var getCoordinatesPin = function (pin, widthPin, heightPin) {
+    var offsetX = pin.offsetLeft + Math.round(widthPin / 2);
+    var offsetY = pin.offsetTop + Math.round(heightPin);
+    var coordinates = offsetX + ', ' + offsetY;
     return coordinates;
+  };
+
+  window.main.setCoordInAddress = function (pin, widthPin, heightPin) {
+    var coordinates = getCoordinatesPin(pin, widthPin, heightPin);
+    adAddress.value = coordinates;
   };
 
   // Листенер на главную метку map__pin--main для активации страницы нажатием мышки
   activationMapTrigger.addEventListener('mousedown', function () {
     activateMap();
-    var left = getElementCoordinates(activationMapTrigger).left + Math.round(PIN_MAIN_WIDTH / 2);
-    var top = getElementCoordinates(activationMapTrigger).top + PIN_MAIN_HEIGHT;
-    // вызов метода, который устанавливает значения поля ввода адреса
-    adAddress.value = left + ', ' + top;
+    window.main.setCoordInAddress(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
   });
 
   // Листенер на главную метку map__pin--main для активации страницы нажатием Enter
   activationMapTrigger.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       activateMap();
+      window.main.setCoordInAddress(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
     }
-    adAddress.value = getElementCoordinates(activationMapTrigger).offsetX + ', '
-    + getElementCoordinates(activationMapTrigger).offsetY;
   });
 
   // Деактивация страницы
@@ -78,4 +76,6 @@
   deactivateElements(adFieldsets);
   deactivateElements(filterSelects);
   deactivateElements(filterFieldsets);
+  // Значения X и Y в поле Адрес при загрузке страницы (главная метка - без острого конца)
+  window.main.setCoordInAddress(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
 })();
