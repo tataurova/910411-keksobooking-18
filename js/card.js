@@ -32,11 +32,11 @@
   };
 
   // Создание набора фотографий для карточки объявления createCard
-  var createFragmentPhotos = function () {
+  var createFragmentPhotos = function (advertisement) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.ArrayAd[0].offer.photos.length; i++) {
+    for (var i = 0; i < advertisement.offer.photos.length; i++) {
       var elementPhoto = makeElement('img', 'popup__photo');
-      elementPhoto.src = window.data.ArrayAd[0].offer.photos[i];
+      elementPhoto.src = advertisement.offer.photos[i];
       elementPhoto.width = 45;
       elementPhoto.height = 40;
       elementPhoto.alt = 'Фотография жилья';
@@ -74,7 +74,7 @@
     description.textContent = advertisement.offer.description;
     avatar.src = advertisement.author.avatar;
     photo.remove();
-    photos.appendChild(createFragmentPhotos());
+    photos.appendChild(createFragmentPhotos(advertisement));
     return card;
   };
 })();

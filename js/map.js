@@ -6,68 +6,54 @@
   var MAX_COORD_Y = 630;
   var PIN_MAIN_WIDTH = 62;
   var PIN_MAIN_HEIGHT = 84;
+
   window.map = {
     PIN_MAIN_WIDTH: PIN_MAIN_WIDTH,
     PIN_MAIN_HEIGHT: PIN_MAIN_HEIGHT
   };
-  // Листенеры на метки для отображения карточки
-  var openCardforPin = function () {
-    for (var i = 0; i < pinsMap.length; i++) {
-      var cardOpen = pinsMap[i];
-      cardOpen.addEventListener('click', function () {
-        openPopup();
-      });
-      cardOpen.addEventListener('keydown', function (evt) {
-        if (evt.keyCode === window.main.ENTER_KEYCODE) {
-          openPopup();
-        }
-      });
-    }
+
+  var openPopup = function (card) {
+    card.classList.remove('hidden');
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.main.ESC_KEYCODE) {
+        closePopup(card);
+      }
+    });
   };
 
-  var openPopup = function () {
-    adCard.classList.remove('hidden');
-    document.addEventListener('keydown', onPopupEscPress);
+  //  var onPopupEscPress = function (evt) {
+  //    if (evt.keyCode === window.main.ESC_KEYCODE) {
+  //      closePopup(card);
+  //    }
+  //  };
+
+  window.map.openCardForPin = function (pin, card) {
+    pin.addEventListener('click', function () {
+      openPopup(card);
+    });
+    pin.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.main.ENTER_KEYCODE) {
+        openPopup(card);
+      }
+    });
   };
 
-  var onPopupEscPress = function (evt) {
-    if (evt.keyCode === window.main.ESC_KEYCODE) {
-      closePopup();
-    }
+  window.map.closeCard = function (closeElement, card) {
+    closeElement.addEventListener('click', function () {
+      closePopup(card);
+    });
+
+    closeElement.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.main.ENTER_KEYCODE) {
+        closePopup(card);
+      }
+    });
   };
 
-  var closePopup = function () {
-    adCard.classList.add('hidden');
-    document.removeEventListener('keydown', onPopupEscPress);
+  var closePopup = function (card) {
+    card.classList.add('hidden');
+    // document.removeEventListener('keydown', onPopupEscPress);
   };
-
-  // Создание массива и вставка карточки в разметку
-  var mapFilters = document.querySelector('.map__filters-container');
-  mapFilters.before(window.createCard(window.data.ArrayAd[0]));
-  var adCard = document.querySelector('.map__card');
-  adCard.classList.add('hidden');
-
-  // Вставка блока pin-элементов в разметку
-  var pinBlock = document.querySelector('.map__pins');
-  pinBlock.appendChild(window.createFragmentPins());
-
-  var popupClose = document.querySelector('.popup__close');
-
-  // Листенер для закрытия карточки по клику
-  popupClose.addEventListener('click', function () {
-    closePopup();
-  });
-
-  // Листенер для закрытия карточки по нажатию ESC
-  popupClose.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.main.ENTER_KEYCODE) {
-      closePopup();
-    }
-  });
-
-  // Запуск функции с листенерами на метках карты для открытия карточки
-  var pinsMap = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-  openCardforPin();
 
   // Перемещение главной метки
   window.main.activationMapTrigger.addEventListener('mousedown', function (evt) {
