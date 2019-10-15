@@ -37,6 +37,7 @@
   // Активация страницы
   var activateMap = function () {
     map.classList.remove('map--faded');
+    window.load(window.data.successHandler, window.data.errorHandler); // Загрузка объявлений с сервера
     adForm.classList.remove('ad-form--disabled');
     activateElements(adFieldsets);
     activateElements(filterSelects);

@@ -1,57 +1,53 @@
 'use strict';
 
 (function () {
-  var typesOffer = ['palace', 'flat', 'house', 'bungalo'];
-  var timesOffer = ['12:00', '13:00', '14:00'];
-
-  // Выбор случайного элемента массива
-  var getRandomElement = function (nameArray) {
-    var element = nameArray[Math.floor(Math.random() * nameArray.length)];
-    return element;
-  };
-
-  // Генерация случайных чисел (от min до max включительно)
-  var getRandomIntInclusive = function (min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  // Создание массива 8 мок-объектов
-  var createArrayAd = function () {
-    var AdArray = [];
-    for (var i = 0; i <= 7; i++) {
-      var Ad = {
-        author: {
-          avatar: 'img/avatars/user0' + [i + 1] + '.png',
-        },
-        offer: {
-          title: 'Уютная квартира',
-          address: '600, 350',
-          price: 10000,
-          type: getRandomElement(typesOffer),
-          rooms: 3,
-          guests: 2,
-          checkin: getRandomElement(timesOffer),
-          checkout: getRandomElement(timesOffer),
-          features: ['wifi', 'dishwasher', 'parking', 'elevator', 'conditioner'],
-          description: 'Описание',
-          photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-            'http://o0.github.io/assets/images/tokyo/hotel3.jpg'],
-        },
-        location: {
-          x: getRandomIntInclusive(1, 1200),
-          y: getRandomIntInclusive(130, 630),
-        },
-      };
-      AdArray.push(Ad);
-    }
-    return AdArray;
-  };
-
-  // Создание массива мок-данных
-  var ArrayAd = createArrayAd();
+  var errorTemplate = document.querySelector('#error')
+    .content
+    .querySelector('.error');
+  var ArrayAd = [];
   window.data = {
     ArrayAd: ArrayAd
   };
+
+  window.data.successHandler = function (ads) {
+    var fragment = document.createDocumentFragment();
+    var pinBlock = document.querySelector('.map__pins');
+    var mapFilters = document.querySelector('.map__filters-container');
+
+    for (var i = 0; i < ads.length; i++) {
+      // Записываем в массив загруженные объявления
+      ArrayAd.push(ads[i]);
+      var card = window.createCard(window.data.ArrayAd[i]);
+
+      fragment.appendChild(window.pin.createPin(ads[i])); // Записываем во фрагмент метки в цикле
+
+      mapFilters.before(card); // Вставляем карточки в разметку в цикле
+
+    }
+
+    // Скрываем карточки присваиванием класса hidden
+    var cards = document.querySelectorAll('.map__card');
+    for (var el = 0; el < cards.length; el++) {
+      cards[el].classList.add('hidden');
+    }
+
+    // Вставка блока pin-меток в разметку
+    pinBlock.appendChild(fragment);
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    // Запускаем листенеры для открытия и закрытия карточек
+    var popupsClose = document.querySelectorAll('.popup__close');
+    for (var j = 0; j < pins.length; j++) {
+      window.map.openCardForPin(pins[j], cards[j]);
+      window.map.closeCard(popupsClose[j], cards[j]);
+    }
+  };
+
+  window.data.errorHandler = function (errorMessage) {
+    var node = errorTemplate.cloneNode(true);
+    var error = node.querySelector('.error__message');
+    error.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
 })();
