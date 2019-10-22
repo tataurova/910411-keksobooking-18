@@ -12,12 +12,15 @@
   var filterSelects = mapFiltersForm.getElementsByTagName('select');
   var filterFieldsets = mapFiltersForm.getElementsByTagName('fieldset');
   var adAddress = adForm.querySelector('#address');
+  var successTemplate = document.querySelector('#success')
+    .content
+    .querySelector('.success');
 
   window.main = {
     ENTER_KEYCODE: ENTER_KEYCODE,
     ESC_KEYCODE: ESC_KEYCODE,
     activationMapTrigger: activationMapTrigger,
-    adAddress: adAddress,
+    adAddress: adAddress
   };
 
   // Деактивация элементов (для форм)
@@ -44,7 +47,7 @@
     activateElements(filterFieldsets);
   };
 
-  // Получение координат метки на карте и запись в поле Адрес
+  // Получение координат метки на карте
   var getCoordinatesPin = function (pin, widthPin, heightPin) {
     var offsetX = pin.offsetLeft + Math.round(widthPin / 2);
     var offsetY = pin.offsetTop + Math.round(heightPin);
@@ -52,9 +55,54 @@
     return coordinates;
   };
 
+  // Получение координат и запись в поле Адрес
   window.main.setCoordInAddress = function (pin, widthPin, heightPin) {
     var coordinates = getCoordinatesPin(pin, widthPin, heightPin);
     adAddress.value = coordinates;
+  };
+
+  // Деактивация страницы
+  var deactivatePage = function () {
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+    deactivateElements(adFieldsets);
+    deactivateElements(filterSelects);
+    deactivateElements(filterFieldsets);
+    // Значения X и Y в поле Адрес при загрузке страницы (главная метка - без острого конца)
+    window.main.setCoordInAddress(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
+  };
+
+  // Возвращение страницы в неактивное состояние
+  var deactivatePageWithoutReload = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    var cards = document.querySelectorAll('.map__card');
+
+    adForm.reset();
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].remove();
+      cards[i].remove();
+    }
+    deactivatePage();
+    activationMapTrigger.style.left = window.main.mainPinCoord.x + 'px';
+    activationMapTrigger.style.top = window.main.mainPinCoord.y + 'px';
+    window.main.setCoordInAddress(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
+  };
+
+  // Сообщение об успешной отправке данных на сервер и деактивация страницы
+  var successLoadHandler = function () {
+    var node = successTemplate.cloneNode(true);
+
+    deactivatePageWithoutReload();
+
+    document.body.insertAdjacentElement('afterbegin', node);
+    document.addEventListener('click', function () { // Удаление окна успешной загрузки по клику
+      node.remove();
+    }, {once: true});
+    document.addEventListener('keydown', function (evt) { // Удаление окна успешной загрузки по нажатию ESC
+      if (evt.keyCode === ESC_KEYCODE) {
+        node.remove();
+      }
+    }, {once: true});
   };
 
   // Листенер на главную метку map__pin--main для активации страницы нажатием мышки
@@ -71,12 +119,21 @@
     }
   });
 
-  // Деактивация страницы
-  map.classList.add('map--faded');
-  adForm.classList.add('ad-form--disabled');
-  deactivateElements(adFieldsets);
-  deactivateElements(filterSelects);
-  deactivateElements(filterFieldsets);
-  // Значения X и Y в поле Адрес при загрузке страницы (главная метка - без острого конца)
-  window.main.setCoordInAddress(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
+  deactivatePage();
+
+  // Координаты главной метки при деактивированной странице
+  window.main.mainPinCoord = {
+    x: activationMapTrigger.offsetLeft,
+    y: activationMapTrigger.offsetTop
+  };
+
+  // Отправка данных на сервер
+  adForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(adForm), function () {
+      map.classList.add('map--faded'); // деактивация страницы
+      successLoadHandler();
+    }, window.data.errorHandler);
+    evt.preventDefault();
+  });
+
 })();

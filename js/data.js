@@ -45,9 +45,23 @@
 
   window.data.errorHandler = function (errorMessage) {
     var node = errorTemplate.cloneNode(true);
+    var main = document.querySelector('main');
     var error = node.querySelector('.error__message');
+    var errorButton = node.querySelector('.error__button');
     error.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
+    main.prepend(node);
+    document.addEventListener('click', function () { // Удаление окна ошибки по клику
+      node.remove();
+    });
+    document.addEventListener('keydown', function (evt) { // Удаление окна ошибки по нажатию ESC
+      if (evt.keyCode === window.main.ESC_KEYCODE) {
+        node.remove();
+      }
+    });
+    errorButton.addEventListener('click', function () { // Удаление окна ошибки при нажатии на кнопку Попробовать снова
+      node.remove();
+    });
+
   };
 
 })();
