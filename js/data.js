@@ -13,8 +13,8 @@
     var fragment = document.createDocumentFragment();
     var pinBlock = document.querySelector('.map__pins');
     var mapFilters = document.querySelector('.map__filters-container');
-
-    for (var i = 0; i < ads.length; i++) {
+    var takeNumber = ads.length > 5 ? 5 : ads.length;
+    for (var i = 0; i < takeNumber; i++) {
       // Записываем в массив загруженные объявления
       ArrayAd.push(ads[i]);
       var card = window.createCard(window.data.ArrayAd[i]);

@@ -6,6 +6,7 @@
   var timeCheckIn = document.querySelector('#timein');
   var timeCheckOut = document.querySelector('#timeout');
   var priceForm = document.querySelector('#price');
+  var housingType = document.querySelector('#housing-type');
   var minPriceDictionary = {
     'palace': 10000,
     'flat': 1000,
@@ -75,5 +76,10 @@
   // Листенер на изменение времени выезда
   timeCheckOut.addEventListener('change', function () {
     changeTimeCheckIn();
+  });
+
+  housingType.addEventListener('change', function () {
+  //  console.log(housingType.value);
+
   });
 })();
