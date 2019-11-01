@@ -13,6 +13,10 @@
   };
 
   var openPopup = function (card) {
+    var previousCard = document.querySelector('.map__card:not(.hidden)');
+    if (previousCard) {
+      previousCard.classList.add('hidden');
+    }
     card.classList.remove('hidden');
     document.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.main.ESC_KEYCODE) {
@@ -20,12 +24,6 @@
       }
     });
   };
-
-  //  var onPopupEscPress = function (evt) {
-  //    if (evt.keyCode === window.main.ESC_KEYCODE) {
-  //      closePopup(card);
-  //    }
-  //  };
 
   window.map.openCardForPin = function (pin, card) {
     pin.addEventListener('click', function () {
@@ -52,7 +50,6 @@
 
   var closePopup = function (card) {
     card.classList.add('hidden');
-    // document.removeEventListener('keydown', onPopupEscPress);
   };
 
   // Перемещение главной метки

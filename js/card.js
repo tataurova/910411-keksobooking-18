@@ -21,11 +21,11 @@
   };
 
   // Создание набора опций features для карточки объявления createCard
-  var createFragmentFeatures = function () {
+  var createFragmentFeatures = function (advertisement) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.ArrayAd[0].offer.features.length; i++) {
+    for (var i = 0; i < advertisement.offer.features.length; i++) {
       var elementFeature = makeElement('li', 'popup__feature');
-      elementFeature.classList.add('popup__feature--' + window.data.ArrayAd[0].offer.features[i]);
+      elementFeature.classList.add('popup__feature--' + advertisement.offer.features[i]);
       fragment.appendChild(elementFeature);
     }
     return fragment;
@@ -70,7 +70,7 @@
       features.removeChild(features.firstChild);
     }
 
-    features.appendChild(createFragmentFeatures());
+    features.appendChild(createFragmentFeatures(advertisement));
     description.textContent = advertisement.offer.description;
     avatar.src = advertisement.author.avatar;
     photo.remove();
