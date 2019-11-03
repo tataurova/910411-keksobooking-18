@@ -4,23 +4,27 @@
   var errorTemplate = document.querySelector('#error')
     .content
     .querySelector('.error');
-  var ArrayAd = [];
+  var allAdsFromServer = [];
   window.data = {
-    ArrayAd: ArrayAd
+    allAdsFromServer: allAdsFromServer
   };
 
-  window.data.successHandler = function (ads) {
+  window.data.filterAds = function () {
+    var filteredEl = window.data.allAdsFromServer.filter(function (el) {
+      return el.offer.type === window.form.housingTypeValue;
+    });
+    return filteredEl;
+  };
+
+  window.data.renderPinsCards = function (ads) {
+
     var fragment = document.createDocumentFragment();
     var pinBlock = document.querySelector('.map__pins');
     var mapFilters = document.querySelector('.map__filters-container');
-
-    for (var i = 0; i < ads.length; i++) {
-      // Записываем в массив загруженные объявления
-      ArrayAd.push(ads[i]);
-      var card = window.createCard(window.data.ArrayAd[i]);
-
+    var takeNumber = ads.length > 5 ? 5 : ads.length;
+    for (var i = 0; i < takeNumber; i++) {
+      var card = window.createCard(ads[i]);
       fragment.appendChild(window.pin.createPin(ads[i])); // Записываем во фрагмент метки в цикле
-
       mapFilters.before(card); // Вставляем карточки в разметку в цикле
 
     }
@@ -43,6 +47,11 @@
     }
   };
 
+  window.data.successHandler = function (ads) {
+    window.data.allAdsFromServer = ads;
+    window.data.renderPinsCards(window.data.allAdsFromServer);
+  };
+
   window.data.errorHandler = function (errorMessage) {
     var node = errorTemplate.cloneNode(true);
     var main = document.querySelector('main');
@@ -50,8 +59,10 @@
     var errorButton = node.querySelector('.error__button');
     error.textContent = errorMessage;
     main.prepend(node);
-    document.addEventListener('click', function () { // Удаление окна ошибки по клику
-      node.remove();
+    document.addEventListener('click', function (evt) { // Удаление окна ошибки по клику
+      if (evt.target !== error) {
+        node.remove();
+      }
     });
     document.addEventListener('keydown', function (evt) { // Удаление окна ошибки по нажатию ESC
       if (evt.keyCode === window.main.ESC_KEYCODE) {

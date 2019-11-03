@@ -6,11 +6,17 @@
   var timeCheckIn = document.querySelector('#timein');
   var timeCheckOut = document.querySelector('#timeout');
   var priceForm = document.querySelector('#price');
+  var housingType = document.querySelector('#housing-type');
+  var housingTypeValue;
   var minPriceDictionary = {
     'palace': 10000,
     'flat': 1000,
     'house': 5000,
     'bungalo': 0,
+  };
+
+  window.form = {
+    housingTypeValue: housingTypeValue
   };
 
   // Ограничение выбора количества гостей для количества комнат
@@ -75,5 +81,20 @@
   // Листенер на изменение времени выезда
   timeCheckOut.addEventListener('change', function () {
     changeTimeCheckIn();
+  });
+
+  // Листенер - фильтрация на изменение типа жилья
+  housingType.addEventListener('change', function () {
+    window.form.housingTypeValue = housingType.value;
+    var filteredEl = window.data.filterAds();
+    window.main.deletePinsCards();
+    window.data.renderPinsCards(filteredEl);
+
+    if (window.form.housingTypeValue === 'any') {
+      window.data.renderPinsCards(window.data.allAdsFromServer);
+    } else {
+      window.data.renderPinsCards(filteredEl);
+    }
+
   });
 })();

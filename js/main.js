@@ -72,16 +72,20 @@
     window.main.setCoordInAddress(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
   };
 
-  // Возвращение страницы в неактивное состояние
-  var deactivatePageWithoutReload = function () {
+  // Удаление меток и карточек из разметки
+  window.main.deletePinsCards = function () {
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     var cards = document.querySelectorAll('.map__card');
-
-    adForm.reset();
     for (var i = 0; i < pins.length; i++) {
       pins[i].remove();
       cards[i].remove();
     }
+  };
+
+  // Возвращение страницы в неактивное состояние
+  var deactivatePageWithoutReload = function () {
+    adForm.reset();
+    window.min.deletePinsCards();
     deactivatePage();
     activationMapTrigger.style.left = window.main.mainPinCoord.x + 'px';
     activationMapTrigger.style.top = window.main.mainPinCoord.y + 'px';
