@@ -9,13 +9,6 @@
     allAdsFromServer: allAdsFromServer
   };
 
-  window.data.filterAds = function () {
-    var filteredEl = window.data.allAdsFromServer.filter(function (el) {
-      return el.offer.type === window.form.housingTypeValue;
-    });
-    return filteredEl;
-  };
-
   window.data.renderPinsCards = function (ads) {
 
     var fragment = document.createDocumentFragment();

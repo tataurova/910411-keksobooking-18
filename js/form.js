@@ -6,17 +6,30 @@
   var timeCheckIn = document.querySelector('#timein');
   var timeCheckOut = document.querySelector('#timeout');
   var priceForm = document.querySelector('#price');
+
   var housingType = document.querySelector('#housing-type');
-  var housingTypeValue;
+  var housingPrice = document.querySelector('#housing-price');
+  var housingRooms = document.querySelector('#housing-rooms');
+  var housingGuests = document.querySelector('#housing-guests');
+  var housingFeatures = document.querySelector('#housing-features');
+
+  var housingTypeValue = housingType.value;
+  var housingPriceValue = housingPrice.value;
+  var housingRoomsValue = housingRooms.value;
+  var housingGuestsValue = housingGuests.value;
+  var housingFeaturesValues = [];
+
   var minPriceDictionary = {
     'palace': 10000,
     'flat': 1000,
     'house': 5000,
-    'bungalo': 0,
+    'bungalo': 0
   };
 
-  window.form = {
-    housingTypeValue: housingTypeValue
+  var rangePriceDictionary = {
+    'low': [0, 10000],
+    'middle': [10000, 50000],
+    'high': [50000, Infinity]
   };
 
   // Ограничение выбора количества гостей для количества комнат
@@ -66,6 +79,64 @@
     timeCheckIn.value = timeCheckOut.value;
   };
 
+  // Фильтрация объявлений
+  var filterAds = function () {
+    var filteredEl = window.data.allAdsFromServer;
+
+    if (housingTypeValue !== 'any') {
+      filteredEl = window.data.allAdsFromServer.filter(function (el) {
+        return el.offer.type === Number(housingTypeValue);
+      });
+    }
+
+    if (housingPriceValue !== 'any') {
+      var minPrice = rangePriceDictionary[housingPriceValue][0];
+      var maxPrice = rangePriceDictionary[housingPriceValue][1];
+      filteredEl = filteredEl.filter(function (el) {
+        return (el.offer.price >= minPrice && el.offer.price < maxPrice);
+      });
+    }
+
+    if (housingRoomsValue !== 'any') {
+      filteredEl = filteredEl.filter(function (el) {
+        return el.offer.rooms === Number(housingRoomsValue);
+      });
+    }
+
+    if (housingGuestsValue !== 'any') {
+      filteredEl = filteredEl.filter(function (el) {
+        return el.offer.guests === Number(housingGuestsValue);
+      });
+    }
+
+    filteredEl = filteredEl.filter(function (el) {
+      var inAdFeatures = function (element) {
+        return el.offer.features.includes(element);
+      };
+      var result = housingFeaturesValues.every(inAdFeatures);
+      return result;
+    });
+
+    return filteredEl;
+  };
+
+  // Отображение новых отфильтрованных объявлений
+  var updateAds = window.debounce(function () {
+    var filteredEl = filterAds(); // фильтруем элементы
+    window.main.deletePinsCards(); // удаляем пины и карточки
+    window.data.renderPinsCards(filteredEl); // создаем из отфильтрованного массива новые пины и карточки
+  });
+
+  // Создание массива с отмеченными чекбоксами
+  var getSelectedFeatures = function () {
+    var selectedFeatures = [];
+    var featuresCheckboxes = document.querySelectorAll('input[name=features]:checked');
+    for (var i = 0; i < featuresCheckboxes.length; i++) {
+      selectedFeatures.push(featuresCheckboxes[i].value);
+    }
+    return selectedFeatures;
+  };
+
   // Валидация количества комнат для количества гостей
   roomsSelect.addEventListener('change', validateRoomsGuests);
 
@@ -85,16 +156,32 @@
 
   // Листенер - фильтрация на изменение типа жилья
   housingType.addEventListener('change', function () {
-    window.form.housingTypeValue = housingType.value;
-    var filteredEl = window.data.filterAds();
-    window.main.deletePinsCards();
-    window.data.renderPinsCards(filteredEl);
-
-    if (window.form.housingTypeValue === 'any') {
-      window.data.renderPinsCards(window.data.allAdsFromServer);
-    } else {
-      window.data.renderPinsCards(filteredEl);
-    }
-
+    housingTypeValue = housingType.value; // фиксируем выбранное значение
+    updateAds();
   });
+
+  // Листенер - фильтрация на изменение стоимости жилья
+  housingPrice.addEventListener('change', function () {
+    housingPriceValue = housingPrice.value;
+    updateAds();
+  });
+
+  // Листенер - фильтрация на изменение количества комнат
+  housingRooms.addEventListener('change', function () {
+    housingRoomsValue = housingRooms.value;
+    updateAds();
+  });
+
+  // Листенер - фильтрация на изменение количества гостей
+  housingGuests.addEventListener('change', function () {
+    housingGuestsValue = housingGuests.value;
+    updateAds();
+  });
+
+  // Листенер - фильтрация на изменение опций жилья (wifi, кондиционер и т.п.)
+  housingFeatures.addEventListener('click', function () {
+    housingFeaturesValues = getSelectedFeatures();
+    updateAds();
+  });
+
 })();
