@@ -533,7 +533,7 @@ fieldset {
   margin-right: 10px;
   padding: 0 15px;
 
-  width: 70px;
+  width: auto;
   height: 70px;
 
   text-align: center;
@@ -758,8 +758,8 @@ fieldset {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
 }
 
 .ad-form__upload {
@@ -808,12 +808,24 @@ fieldset {
 .ad-form__photo {
   margin-right: 10px;
   margin-bottom: 10px;
+  padding: 10px;
+  padding-top: 0;
 
-  width: 70px;
-  height: 70px;
+  min-width: 70px;
+  min-height: 70px;
 
   background-color: #e4e4de;
   border-radius: 5px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.ad-form__img {
+  margin: 10px;
+  margin-bottom: 0;
 }
 
 .ad-form__element--submit {
