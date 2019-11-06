@@ -53,16 +53,24 @@
     var errorButton = node.querySelector('.error__button');
     error.textContent = errorMessage;
     main.prepend(node);
-    document.addEventListener('click', function (evt) { // Удаление окна ошибки по клику
-      if (evt.target !== error) {
+
+    var onDocumentClick = function (evt) {
+       if (evt.target !== error) {
         node.remove();
+        document.removeEventListener('click', onDocumentClick);
       }
-    });
-    document.addEventListener('keydown', function (evt) { // Удаление окна ошибки по нажатию ESC
+    };
+
+    var onDocumentKeydown = function (evt) {
       if (evt.keyCode === window.main.ESC_KEYCODE) {
         node.remove();
+        document.removeEventListener('click', onDocumentKeydown);
       }
-    });
+    };
+
+    document.addEventListener('click', onDocumentClick); // Удаление окна ошибки по клику
+    document.addEventListener('keydown', onDocumentKeydown); // Удаление окна ошибки по нажатию ESC
+
     errorButton.addEventListener('click', function () { // Удаление окна ошибки при нажатии на кнопку Попробовать снова
       node.remove();
     });

@@ -100,16 +100,22 @@
     window.data.main.prepend(node);
     var successMessage = document.querySelector('.success__message');
 
-    document.addEventListener('click', function (evt) { // Удаление окна успешной загрузки по клику
+    var onDocumentClick = function (evt) {
       if (evt.target !== successMessage) {
         node.remove();
+        document.removeEventListener('click', onDocumentClick);
       }
-    }, {once: true});
-    document.addEventListener('keydown', function (evt) { // Удаление окна успешной загрузки по нажатию ESC
+    };
+
+    var onDocumentKeydown = function (evt) {
       if (evt.keyCode === ESC_KEYCODE) {
         node.remove();
+        document.removeEventListener('click', onDocumentKeydown);
       }
-    }, {once: true});
+    };
+
+    document.addEventListener('click', onDocumentClick); // Удаление окна успешной загрузки по клику
+    document.addEventListener('keydown', onDocumentKeydown); // Удаление окна успешной загрузки по нажатию ESC
   };
 
   // Листенер на главную метку map__pin--main для активации страницы нажатием мышки
