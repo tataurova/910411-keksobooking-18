@@ -5,8 +5,10 @@
     .content
     .querySelector('.error');
   var allAdsFromServer = [];
+  var main = document.querySelector('main');
   window.data = {
-    allAdsFromServer: allAdsFromServer
+    allAdsFromServer: allAdsFromServer,
+    main: main
   };
 
   window.data.renderPinsCards = function (ads) {
@@ -47,7 +49,6 @@
 
   window.data.errorHandler = function (errorMessage) {
     var node = errorTemplate.cloneNode(true);
-    var main = document.querySelector('main');
     var error = node.querySelector('.error__message');
     var errorButton = node.querySelector('.error__button');
     error.textContent = errorMessage;

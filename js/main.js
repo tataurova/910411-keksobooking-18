@@ -85,7 +85,7 @@
   // Возвращение страницы в неактивное состояние
   var deactivatePageWithoutReload = function () {
     adForm.reset();
-    window.min.deletePinsCards();
+    window.main.deletePinsCards();
     deactivatePage();
     activationMapTrigger.style.left = window.main.mainPinCoord.x + 'px';
     activationMapTrigger.style.top = window.main.mainPinCoord.y + 'px';
@@ -97,10 +97,13 @@
     var node = successTemplate.cloneNode(true);
 
     deactivatePageWithoutReload();
+    window.data.main.prepend(node);
+    var successMessage = document.querySelector('.success__message');
 
-    document.body.insertAdjacentElement('afterbegin', node);
-    document.addEventListener('click', function () { // Удаление окна успешной загрузки по клику
-      node.remove();
+    document.addEventListener('click', function (evt) { // Удаление окна успешной загрузки по клику
+      if (evt.target !== successMessage) {
+        node.remove();
+      }
     }, {once: true});
     document.addEventListener('keydown', function (evt) { // Удаление окна успешной загрузки по нажатию ESC
       if (evt.keyCode === ESC_KEYCODE) {
