@@ -3,11 +3,11 @@
 (function () {
   var cardTemplate = document.querySelector('#card')
     .content;
-  var offerTypeDictionary = {
-    'palace': 'Дворец',
-    'flat': 'Квартира',
-    'house': 'Дом',
-    'bungalo': 'Бунгало',
+  var OfferTypeDictionary = {
+    'PALACE': 'Дворец',
+    'FLAT': 'Квартира',
+    'HOUSE': 'Дом',
+    'BUNGALO': 'Бунгало',
   };
 
   // Создание элемента
@@ -62,7 +62,7 @@
     title.textContent = advertisement.offer.title;
     address.textContent = advertisement.offer.address;
     price.insertAdjacentText = advertisement.offer.price;
-    type.textContent = offerTypeDictionary[advertisement.offer.type];
+    type.textContent = OfferTypeDictionary[advertisement.offer.type.toUpperCase()];
     roomsAndGuests.textContent = advertisement.offer.rooms + ' комнаты для ' + advertisement.offer.guests + ' гостей';
     checkinAndCheckout.textContent = 'Заезд после ' + advertisement.offer.checkin + ', выезд до ' + advertisement.offer.checkout;
 
