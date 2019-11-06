@@ -26,7 +26,7 @@
 
     // Скрываем карточки присваиванием класса hidden
     var cards = document.querySelectorAll('.map__card');
-    for (var i = 0; i < cards.length; el++) {
+    for (var i = 0; i < cards.length; i++) {
       cards[i].classList.add('hidden');
     }
 

@@ -90,8 +90,8 @@
     }
 
     if (housingPriceValue !== 'any') {
-      var minPrice = RangePriceDictionary[housingPriceValue][0].toUpperCase();
-      var maxPrice = RangePriceDictionary[housingPriceValue][1].toUpperCase();
+      var minPrice = RangePriceDictionary[housingPriceValue.toUpperCase()][0];
+      var maxPrice = RangePriceDictionary[housingPriceValue.toUpperCase()][1];
       filteredEl = filteredEl.filter(function (el) {
         return (el.offer.price >= minPrice && el.offer.price < maxPrice);
       });
