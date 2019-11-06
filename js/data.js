@@ -26,8 +26,8 @@
 
     // Скрываем карточки присваиванием класса hidden
     var cards = document.querySelectorAll('.map__card');
-    for (var el = 0; el < cards.length; el++) {
-      cards[el].classList.add('hidden');
+    for (var i = 0; i < cards.length; el++) {
+      cards[i].classList.add('hidden');
     }
 
     // Вставка блока pin-меток в разметку

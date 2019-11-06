@@ -37,8 +37,6 @@
     for (var i = 0; i < advertisement.offer.photos.length; i++) {
       var elementPhoto = makeElement('img', 'popup__photo');
       elementPhoto.src = advertisement.offer.photos[i];
-      elementPhoto.width = 45;
-      elementPhoto.height = 40;
       elementPhoto.alt = 'Фотография жилья';
       fragment.appendChild(elementPhoto);
     }
@@ -61,7 +59,9 @@
     var photo = card.querySelector('.popup__photo');
     title.textContent = advertisement.offer.title;
     address.textContent = advertisement.offer.address;
-    price.insertAdjacentText = advertisement.offer.price;
+    price.textContent = '';
+    price.insertAdjacentHTML('afterbegin', advertisement.offer.price + '<span>/ночь</span>');
+    console.log(advertisement.offer.price);
     type.textContent = OfferTypeDictionary[advertisement.offer.type.toUpperCase()];
     roomsAndGuests.textContent = advertisement.offer.rooms + ' комнаты для ' + advertisement.offer.guests + ' гостей';
     checkinAndCheckout.textContent = 'Заезд после ' + advertisement.offer.checkin + ', выезд до ' + advertisement.offer.checkout;

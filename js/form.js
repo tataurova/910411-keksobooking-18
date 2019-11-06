@@ -19,17 +19,17 @@
   var housingGuestsValue = housingGuests.value;
   var housingFeaturesValues = [];
 
-  var minPriceDictionary = {
-    'palace': 10000,
-    'flat': 1000,
-    'house': 5000,
-    'bungalo': 0
+  var MinPriceDictionary = {
+    'PALACE': 10000,
+    'FLAT': 1000,
+    'HOUSE': 5000,
+    'BUNGALO': 0
   };
 
-  var rangePriceDictionary = {
-    'low': [0, 10000],
-    'middle': [10000, 50000],
-    'high': [50000, Infinity]
+  var RangePriceDictionary = {
+    'LOW': [0, 10000],
+    'MIDDLE': [10000, 50000],
+    'HIGH': [50000, Infinity]
   };
 
   // Ограничение выбора количества гостей для количества комнат
@@ -65,8 +65,8 @@
 
   // Изменение min значения цены в разметке в зависимости от типа жилья
   var changeMinPrice = function () {
-    priceForm.min = minPriceDictionary[typeForm.value];
-    priceForm.placeholder = minPriceDictionary[typeForm.value];
+    priceForm.min = MinPriceDictionary[typeForm.value.toUpperCase()];
+    priceForm.placeholder = MinPriceDictionary[typeForm.value.toUpperCase()];
   };
 
   // Время выезда
@@ -90,8 +90,8 @@
     }
 
     if (housingPriceValue !== 'any') {
-      var minPrice = rangePriceDictionary[housingPriceValue][0];
-      var maxPrice = rangePriceDictionary[housingPriceValue][1];
+      var minPrice = RangePriceDictionary[housingPriceValue][0].toUpperCase();
+      var maxPrice = RangePriceDictionary[housingPriceValue][1].toUpperCase();
       filteredEl = filteredEl.filter(function (el) {
         return (el.offer.price >= minPrice && el.offer.price < maxPrice);
       });

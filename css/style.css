@@ -1164,6 +1164,8 @@ fieldset {
 }
 
 .popup__photo {
+  width: 45px;
+  height: 40px;
   margin-right: 5px;
   margin-bottom: 5px;
 }
