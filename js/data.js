@@ -26,7 +26,7 @@
     // Скрываем карточки присваиванием класса hidden
     var cards = document.querySelectorAll('.map__card');
     for (var j = 0; j < cards.length; j++) {
-      cards[i].classList.add('hidden');
+      cards[j].classList.add('hidden');
     }
 
     // Вставка блока pin-меток в разметку
@@ -36,8 +36,8 @@
     // Запускаем листенеры для открытия и закрытия карточек
     var popupsClose = document.querySelectorAll('.popup__close');
     for (var k = 0; k < pins.length; k++) {
-      window.map.openCardForPin(pins[j], cards[j]);
-      window.map.closeCard(popupsClose[j], cards[j]);
+      window.map.openCardForPin(pins[k], cards[k]);
+      window.map.closeCard(popupsClose[k], cards[k]);
     }
   };
 
