@@ -60,8 +60,7 @@
     title.textContent = advertisement.offer.title;
     address.textContent = advertisement.offer.address;
     price.textContent = '';
-    price.insertAdjacentHTML('afterbegin', advertisement.offer.price + '<span>/ночь</span>');
-    console.log(advertisement.offer.price);
+    price.insertAdjacentHTML('afterbegin', advertisement.offer.price + '₽<span>/ночь</span>');
     type.textContent = OfferTypeDictionary[advertisement.offer.type.toUpperCase()];
     roomsAndGuests.textContent = advertisement.offer.rooms + ' комнаты для ' + advertisement.offer.guests + ' гостей';
     checkinAndCheckout.textContent = 'Заезд после ' + advertisement.offer.checkin + ', выезд до ' + advertisement.offer.checkout;

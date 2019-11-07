@@ -6,13 +6,13 @@
     .querySelector('.error');
   var allAdsFromServer = [];
   var main = document.querySelector('main');
+
   window.data = {
     allAdsFromServer: allAdsFromServer,
     main: main
   };
 
   window.data.renderPinsCards = function (ads) {
-
     var fragment = document.createDocumentFragment();
     var pinBlock = document.querySelector('.map__pins');
     var mapFilters = document.querySelector('.map__filters-container');
@@ -21,7 +21,6 @@
       var card = window.createCard(ads[i]);
       fragment.appendChild(window.pin.createPin(ads[i])); // Записываем во фрагмент метки в цикле
       mapFilters.before(card); // Вставляем карточки в разметку в цикле
-
     }
 
     // Скрываем карточки присваиванием класса hidden
@@ -43,6 +42,9 @@
   };
 
   window.data.successHandler = function (ads) {
+    ads = ads.filter (function (ad) { // при отсутствии поля offer не отображаем объявление
+      return ad.offer;
+    });
     window.data.allAdsFromServer = ads;
     window.data.renderPinsCards(window.data.allAdsFromServer);
   };

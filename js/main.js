@@ -4,6 +4,7 @@
   var ENTER_KEYCODE = 13;
   var ESC_KEYCODE = 27;
   var WIDTH_MAIN_PIN_DEACTIVATE = 65;
+
   var map = document.querySelector('.map');
   var activationMapTrigger = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
@@ -83,7 +84,7 @@
   };
 
   // Возвращение страницы в неактивное состояние
-  var deactivatePageWithoutReload = function () {
+  window.main.deactivatePageWithoutReload = function () {
     adForm.reset();
     window.main.deletePinsCards();
     deactivatePage();
@@ -96,7 +97,7 @@
   var successLoadHandler = function () {
     var node = successTemplate.cloneNode(true);
 
-    deactivatePageWithoutReload();
+    window.main.deactivatePageWithoutReload();
     window.data.main.prepend(node);
     var successMessage = document.querySelector('.success__message');
 

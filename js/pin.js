@@ -1,11 +1,12 @@
 'use strict';
 
 (function () {
+  var PIN_WIDTH = 50;
+  var PIN_HEIGHT = 70;
+
   var similarPinTemplate = document.querySelector('#pin') // Поиск шаблона копируемого DOM-элемента
     .content
     .querySelector('.map__pin');
-  var PIN_WIDTH = 50;
-  var PIN_HEIGHT = 70;
 
   // Создание pin-элемента на основе загруженных данных
   window.pin.createPin = function (ad) {

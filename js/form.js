@@ -2,10 +2,12 @@
 
 (function () {
   var roomsSelect = document.querySelector('#room_number');
+  var guestsSelect = document.querySelector('#capacity');
   var typeForm = document.querySelector('#type');
   var timeCheckIn = document.querySelector('#timein');
   var timeCheckOut = document.querySelector('#timeout');
   var priceForm = document.querySelector('#price');
+  var formReset = document.querySelector('.ad-form__reset');
 
   var housingType = document.querySelector('#housing-type');
   var housingPrice = document.querySelector('#housing-price');
@@ -34,7 +36,7 @@
 
   // Ограничение выбора количества гостей для количества комнат
   var validateRoomsGuests = function () {
-    var roomsCapacityMap = {
+    var RoomsCapacityMap = {
       '1': {
         'guests': ['1'],
         'tipText': '1 комната для 1 гостя'
@@ -47,19 +49,19 @@
         'guests': ['1', '2', '3'],
         'tipText': '3 комнаты для 1, 2 и 3 гостей'
       },
-      'any': {
-        'guests': ['any'],
+      '100': {
+        'guests': ['0'],
         'tipText': '100 комнат не для гостей'
       },
     };
 
     var rooms = roomsSelect.value;
     var guests = document.querySelector('#capacity').value;
-
-    if (roomsCapacityMap[rooms].guests.includes(guests)) {
+    if (RoomsCapacityMap[rooms].guests.includes(guests)) {
       roomsSelect.setCustomValidity('');
     } else {
-      roomsSelect.setCustomValidity(roomsCapacityMap[rooms].tipText);
+      console.log (RoomsCapacityMap[rooms].tipText);
+      roomsSelect.setCustomValidity(RoomsCapacityMap[rooms].tipText);
     }
   };
 
@@ -85,7 +87,7 @@
 
     if (housingTypeValue !== 'any') {
       filteredEl = window.data.allAdsFromServer.filter(function (el) {
-        return el.offer.type === Number(housingTypeValue);
+        return el.offer.type === housingTypeValue;
       });
     }
 
@@ -139,6 +141,7 @@
 
   // Валидация количества комнат для количества гостей
   roomsSelect.addEventListener('change', validateRoomsGuests);
+  guestsSelect.addEventListener('change', validateRoomsGuests);
 
   typeForm.addEventListener('change', function () {
     changeMinPrice();
@@ -183,5 +186,7 @@
     housingFeaturesValues = getSelectedFeatures();
     updateAds();
   });
+
+  formReset.addEventListener('click', window.main.deactivatePageWithoutReload);
 
 })();
