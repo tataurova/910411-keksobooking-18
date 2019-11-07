@@ -28,9 +28,9 @@
 
   var extinguishPin = function () {
     var previousPin = document.querySelector('.map__pin--active');
-     if (previousPin) {
-       previousPin.classList.remove('map__pin--active');
-     }
+    if (previousPin) {
+      previousPin.classList.remove('map__pin--active');
+    }
   };
 
   var highlightPin = function (pin) {

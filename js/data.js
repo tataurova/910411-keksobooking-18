@@ -25,7 +25,7 @@
 
     // Скрываем карточки присваиванием класса hidden
     var cards = document.querySelectorAll('.map__card');
-    for (var i = 0; i < cards.length; i++) {
+    for (var j = 0; j < cards.length; j++) {
       cards[i].classList.add('hidden');
     }
 
@@ -35,14 +35,14 @@
 
     // Запускаем листенеры для открытия и закрытия карточек
     var popupsClose = document.querySelectorAll('.popup__close');
-    for (var j = 0; j < pins.length; j++) {
+    for (var k = 0; k < pins.length; k++) {
       window.map.openCardForPin(pins[j], cards[j]);
       window.map.closeCard(popupsClose[j], cards[j]);
     }
   };
 
   window.data.successHandler = function (ads) {
-    ads = ads.filter (function (ad) { // при отсутствии поля offer не отображаем объявление
+    ads = ads.filter(function (ad) { // при отсутствии поля offer не отображаем объявление
       return ad.offer;
     });
     window.data.allAdsFromServer = ads;
@@ -57,7 +57,7 @@
     main.prepend(node);
 
     var onDocumentClick = function (evt) {
-       if (evt.target !== error) {
+      if (evt.target !== error) {
         node.remove();
         document.removeEventListener('click', onDocumentClick);
       }

@@ -60,7 +60,6 @@
     if (RoomsCapacityMap[rooms].guests.includes(guests)) {
       roomsSelect.setCustomValidity('');
     } else {
-      console.log (RoomsCapacityMap[rooms].tipText);
       roomsSelect.setCustomValidity(RoomsCapacityMap[rooms].tipText);
     }
   };
