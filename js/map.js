@@ -116,8 +116,8 @@
       document.removeEventListener('mouseup', onMouseUp);
 
       if (dragged) {
-        var onClickPreventDefault = function (evt) {
-          evt.preventDefault();
+        var onClickPreventDefault = function (dragEvt) {
+          dragEvt.preventDefault();
           window.main.activationMapTrigger.removeEventListener('click', onClickPreventDefault);
         };
         window.main.activationMapTrigger.addEventListener('click', onClickPreventDefault);
