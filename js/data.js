@@ -59,6 +59,7 @@
     var onDocumentClick = function (evt) {
       if (evt.target !== error) {
         node.remove();
+        window.main.deactivatePageWithoutReload();
         document.removeEventListener('click', onDocumentClick);
       }
     };
@@ -66,6 +67,7 @@
     var onDocumentKeydown = function (evt) {
       if (evt.keyCode === window.main.ESC_KEYCODE) {
         node.remove();
+        window.main.deactivatePageWithoutReload();
         document.removeEventListener('click', onDocumentKeydown);
       }
     };

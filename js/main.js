@@ -86,11 +86,16 @@
   // Возвращение страницы в неактивное состояние
   window.main.deactivatePageWithoutReload = function () {
     adForm.reset();
+    window.file.avatarPreview.src = 'img/muffin-grey.svg';
+
+    while (window.file.photoPreview.firstChild) {
+      window.file.photoPreview.removeChild(window.file.photoPreview.firstChild);
+    }
+
     window.main.deletePinsCards();
-    deactivatePage();
     activationMapTrigger.style.left = window.main.mainPinCoord.x + 'px';
     activationMapTrigger.style.top = window.main.mainPinCoord.y + 'px';
-    window.main.setCoordInAddress(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
+    deactivatePage();
   };
 
   // Сообщение об успешной отправке данных на сервер и деактивация страницы
