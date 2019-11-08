@@ -10,8 +10,8 @@
   var adForm = document.querySelector('.ad-form');
   var mapFiltersForm = document.querySelector('.map__filters');
   var adFieldsets = adForm.querySelectorAll('fieldset');
-  var filterSelects = mapFiltersForm.getElementsByTagName('select');
-  var filterFieldsets = mapFiltersForm.getElementsByTagName('fieldset');
+  var filterSelects = mapFiltersForm.querySelectorAll('select');
+  var filterFieldsets = mapFiltersForm.querySelectorAll('fieldset');
   var adAddress = adForm.querySelector('#address');
   var successTemplate = document.querySelector('#success')
     .content
@@ -26,16 +26,16 @@
 
   // Деактивация элементов (для форм)
   var deactivateElements = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      array[i].disabled = true;
-    }
+    array.forEach(function (item) {
+      item.disabled = true;
+    });
   };
 
   // Активация элементов (для форм)
   var activateElements = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      array[i].disabled = false;
-    }
+    array.forEach(function (item) {
+      item.disabled = false;
+    });
   };
 
   // Активация страницы
