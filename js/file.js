@@ -8,6 +8,11 @@
   var photoChooser = document.querySelector('.ad-form__input');
   var photoPreview = document.querySelector('.ad-form__photo');
 
+  window.file = {
+    avatarPreview: avatarPreview,
+    photoPreview: photoPreview
+  };
+
   var loadPhoto = function (input, preview) {
     var file = input.files[0];
     var fileName = file.name.toLowerCase();

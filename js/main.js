@@ -4,13 +4,14 @@
   var ENTER_KEYCODE = 13;
   var ESC_KEYCODE = 27;
   var WIDTH_MAIN_PIN_DEACTIVATE = 65;
+
   var map = document.querySelector('.map');
   var activationMapTrigger = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var mapFiltersForm = document.querySelector('.map__filters');
   var adFieldsets = adForm.querySelectorAll('fieldset');
-  var filterSelects = mapFiltersForm.getElementsByTagName('select');
-  var filterFieldsets = mapFiltersForm.getElementsByTagName('fieldset');
+  var filterSelects = mapFiltersForm.querySelectorAll('select');
+  var filterFieldsets = mapFiltersForm.querySelectorAll('fieldset');
   var adAddress = adForm.querySelector('#address');
   var successTemplate = document.querySelector('#success')
     .content
@@ -25,16 +26,16 @@
 
   // Деактивация элементов (для форм)
   var deactivateElements = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      array[i].disabled = true;
-    }
+    array.forEach(function (item) {
+      item.disabled = true;
+    });
   };
 
   // Активация элементов (для форм)
   var activateElements = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      array[i].disabled = false;
-    }
+    array.forEach(function (item) {
+      item.disabled = false;
+    });
   };
 
   // Активация страницы
@@ -83,33 +84,44 @@
   };
 
   // Возвращение страницы в неактивное состояние
-  var deactivatePageWithoutReload = function () {
+  window.main.deactivatePageWithoutReload = function () {
     adForm.reset();
+    window.file.avatarPreview.src = 'img/muffin-grey.svg';
+
+    while (window.file.photoPreview.firstChild) {
+      window.file.photoPreview.removeChild(window.file.photoPreview.firstChild);
+    }
+
     window.main.deletePinsCards();
-    deactivatePage();
     activationMapTrigger.style.left = window.main.mainPinCoord.x + 'px';
     activationMapTrigger.style.top = window.main.mainPinCoord.y + 'px';
-    window.main.setCoordInAddress(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
+    deactivatePage();
   };
 
   // Сообщение об успешной отправке данных на сервер и деактивация страницы
   var successLoadHandler = function () {
     var node = successTemplate.cloneNode(true);
 
-    deactivatePageWithoutReload();
+    window.main.deactivatePageWithoutReload();
     window.data.main.prepend(node);
     var successMessage = document.querySelector('.success__message');
 
-    document.addEventListener('click', function (evt) { // Удаление окна успешной загрузки по клику
+    var onDocumentClick = function (evt) {
       if (evt.target !== successMessage) {
         node.remove();
+        document.removeEventListener('click', onDocumentClick);
       }
-    }, {once: true});
-    document.addEventListener('keydown', function (evt) { // Удаление окна успешной загрузки по нажатию ESC
+    };
+
+    var onDocumentKeydown = function (evt) {
       if (evt.keyCode === ESC_KEYCODE) {
         node.remove();
+        document.removeEventListener('click', onDocumentKeydown);
       }
-    }, {once: true});
+    };
+
+    document.addEventListener('click', onDocumentClick); // Удаление окна успешной загрузки по клику
+    document.addEventListener('keydown', onDocumentKeydown); // Удаление окна успешной загрузки по нажатию ESC
   };
 
   // Листенер на главную метку map__pin--main для активации страницы нажатием мышки

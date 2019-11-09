@@ -21,16 +21,31 @@
     document.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.main.ESC_KEYCODE) {
         closePopup(card);
+        extinguishPin();
       }
     });
   };
 
+  var extinguishPin = function () {
+    var previousPin = document.querySelector('.map__pin--active');
+    if (previousPin) {
+      previousPin.classList.remove('map__pin--active');
+    }
+  };
+
+  var highlightPin = function (pin) {
+    extinguishPin();
+    pin.classList.add('map__pin--active');
+  };
+
   window.map.openCardForPin = function (pin, card) {
     pin.addEventListener('click', function () {
+      highlightPin(pin);
       openPopup(card);
     });
     pin.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.main.ENTER_KEYCODE) {
+        highlightPin(pin);
         openPopup(card);
       }
     });
@@ -39,11 +54,13 @@
   window.map.closeCard = function (closeElement, card) {
     closeElement.addEventListener('click', function () {
       closePopup(card);
+      extinguishPin();
     });
 
     closeElement.addEventListener('keydown', function (evt) {
       if (evt.keyCode === window.main.ENTER_KEYCODE) {
         closePopup(card);
+        extinguishPin();
       }
     });
   };
