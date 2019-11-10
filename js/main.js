@@ -72,7 +72,7 @@
     if (evt.keyCode === ENTER_KEYCODE) {
       activateMap();
       window.main.setCoordInAddress(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
-      activationMapTrigger.removeEventListener('mousedown', onKeyDown);
+      activationMapTrigger.removeEventListener('keydown', onKeyDown);
     }
   };
 
