@@ -97,12 +97,12 @@
       var currentY = window.main.activationMapTrigger.offsetTop - shift.y;
 
       // Ограничение координаты X острой метки
-      if (currentX > -Math.round(PIN_MAIN_WIDTH / 2) & currentX < MAX_WIDTH_MAP - Math.round(PIN_MAIN_WIDTH / 2)) {
+      if (currentX > -Math.round(PIN_MAIN_WIDTH / 2) && currentX < MAX_WIDTH_MAP - Math.round(PIN_MAIN_WIDTH / 2)) {
         window.main.activationMapTrigger.style.left = currentX + 'px';
       }
 
       // Ограничение координаты Y острой метки
-      if (currentY > (MIN_COORD_Y - PIN_MAIN_HEIGHT) & currentY < (MAX_COORD_Y - PIN_MAIN_HEIGHT)) {
+      if (currentY > (MIN_COORD_Y - PIN_MAIN_HEIGHT) && currentY < (MAX_COORD_Y - PIN_MAIN_HEIGHT)) {
         window.main.activationMapTrigger.style.top = currentY + 'px';
       }
       // Значения X и Y в поле Адрес при перемещении метки

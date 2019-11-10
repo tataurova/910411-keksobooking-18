@@ -68,7 +68,7 @@
       if (evt.keyCode === window.main.ESC_KEYCODE) {
         node.remove();
         window.main.deactivatePageWithoutReload();
-        document.removeEventListener('click', onDocumentKeydown);
+        document.removeEventListener('keydown', onDocumentKeydown);
       }
     };
 
