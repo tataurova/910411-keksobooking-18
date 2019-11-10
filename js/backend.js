@@ -4,6 +4,8 @@
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
   var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
   var HTTP_RESPONSE_OK = 200;
+  var METHOD_LOAD = 'GET';
+  var METHOD_UPLOAD = 'POST';
 
   // Загрузка данных с сервера
   window.load = function (onLoad, onError) {
@@ -21,7 +23,7 @@
       onError('Произошла ошибка соединения');
     });
 
-    xhr.open('GET', URL_LOAD);
+    xhr.open(METHOD_LOAD, URL_LOAD);
     xhr.send();
   };
 
@@ -42,7 +44,7 @@
       onError('Произошла ошибка соединения');
     });
 
-    xhr.open('POST', URL_UPLOAD);
+    xhr.open(METHOD_UPLOAD, URL_UPLOAD);
     xhr.send(data);
   };
 })();
