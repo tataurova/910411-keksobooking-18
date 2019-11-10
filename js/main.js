@@ -106,6 +106,7 @@
   // Возвращение страницы в неактивное состояние
   window.main.deactivatePageWithoutReload = function () {
     adForm.reset();
+    mapFiltersForm.reset();
     window.file.avatarPreview.src = 'img/muffin-grey.svg';
 
     while (window.file.photoPreview.firstChild) {

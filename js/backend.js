@@ -2,7 +2,7 @@
 
 (function () {
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
-  var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
+  var URL_UPLOAD = 'https://js.dump.academy/keksobookin';
   var HTTP_RESPONSE_OK = 200;
 
   // Загрузка данных с сервера
