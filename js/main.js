@@ -62,6 +62,20 @@
     adAddress.value = coordinates;
   };
 
+  var onMouseDown = function () {
+    activateMap();
+    window.main.setCoordInAddress(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
+    activationMapTrigger.removeEventListener('mousedown', onMouseDown);
+  };
+
+  var onKeyDown = function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      activateMap();
+      window.main.setCoordInAddress(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
+      activationMapTrigger.removeEventListener('mousedown', onKeyDown);
+    }
+  };
+
   // Деактивация страницы
   var deactivatePage = function () {
     map.classList.add('map--faded');
@@ -71,6 +85,12 @@
     deactivateElements(filterFieldsets);
     // Значения X и Y в поле Адрес при загрузке страницы (главная метка - без острого конца)
     window.main.setCoordInAddress(activationMapTrigger, WIDTH_MAIN_PIN_DEACTIVATE, WIDTH_MAIN_PIN_DEACTIVATE / 2);
+
+    // Листенер на главную метку map__pin--main для активации страницы нажатием мышки
+    activationMapTrigger.addEventListener('mousedown', onMouseDown);
+
+    // Листенер на главную метку map__pin--main для активации страницы нажатием Enter
+    activationMapTrigger.addEventListener('keydown', onKeyDown);
   };
 
   // Удаление меток и карточек из разметки
@@ -123,20 +143,6 @@
     document.addEventListener('click', onDocumentClick); // Удаление окна успешной загрузки по клику
     document.addEventListener('keydown', onDocumentKeydown); // Удаление окна успешной загрузки по нажатию ESC
   };
-
-  // Листенер на главную метку map__pin--main для активации страницы нажатием мышки
-  activationMapTrigger.addEventListener('mousedown', function () {
-    activateMap();
-    window.main.setCoordInAddress(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
-  });
-
-  // Листенер на главную метку map__pin--main для активации страницы нажатием Enter
-  activationMapTrigger.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      activateMap();
-      window.main.setCoordInAddress(activationMapTrigger, window.map.PIN_MAIN_WIDTH, window.map.PIN_MAIN_HEIGHT);
-    }
-  });
 
   deactivatePage();
 

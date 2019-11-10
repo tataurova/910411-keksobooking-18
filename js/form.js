@@ -22,16 +22,16 @@
   var housingFeaturesValues = [];
 
   var MinPriceDictionary = {
-    'PALACE': 10000,
-    'FLAT': 1000,
-    'HOUSE': 5000,
-    'BUNGALO': 0
+    PALACE: 10000,
+    FLAT: 1000,
+    HOUSE: 5000,
+    BUNGALO: 0
   };
 
   var RangePriceDictionary = {
-    'LOW': [0, 10000],
-    'MIDDLE': [10000, 50000],
-    'HIGH': [50000, Infinity]
+    LOW: [0, 10000],
+    MIDDLE: [10000, 50000],
+    HIGH: [50000, Infinity]
   };
 
   // Ограничение выбора количества гостей для количества комнат
@@ -111,11 +111,10 @@
     }
 
     filteredEl = filteredEl.filter(function (el) {
-      var inAdFeatures = function (element) {
+      var checkAdMatches = function (element) { // Проверка, включает ли объявление выбранные опции
         return el.offer.features.includes(element);
       };
-      var result = housingFeaturesValues.every(inAdFeatures);
-      return result;
+      return housingFeaturesValues.every(checkAdMatches);
     });
 
     return filteredEl;

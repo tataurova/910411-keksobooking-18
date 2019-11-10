@@ -4,10 +4,10 @@
   var cardTemplate = document.querySelector('#card')
     .content;
   var OfferTypeDictionary = {
-    'PALACE': 'Дворец',
-    'FLAT': 'Квартира',
-    'HOUSE': 'Дом',
-    'BUNGALO': 'Бунгало',
+    PALACE: 'Дворец',
+    FLAT: 'Квартира',
+    HOUSE: 'Дом',
+    BUNGALO: 'Бунгало',
   };
 
   // Создание элемента
